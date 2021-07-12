@@ -1,0 +1,204 @@
+package paket;
+
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ResourceBundle;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+public class KontrolcuUygulama1 implements Initializable {
+
+    @FXML
+    private TextField txtAdý;
+
+    @FXML
+    private TextField txtSoyadý;
+
+    @FXML
+    private DatePicker dpTarih;
+
+    @FXML
+    private Spinner<Double> spnMaaþ;
+
+    @FXML
+    private ComboBox<String> cmbCinsiyet;
+
+    @FXML
+    private ComboBox<String> cmbDepartman;
+
+    @FXML
+    private TableView<Personel> tblPersonel;
+
+    @FXML
+    private TableColumn<Personel, String> sütunAdý;
+
+    @FXML
+    private TableColumn<Personel, String> sütunSoyadý;
+
+    @FXML
+    private TableColumn<Personel, LocalDate> sütunTarih;
+
+    @FXML
+    private TableColumn<Personel, Double> sütunMaaþ;
+
+    @FXML
+    private TableColumn<Personel, String> sütunCinsiyet;
+
+    @FXML
+    private TableColumn<Personel, String> sütunDeparman;
+    
+    private ObservableList<Personel> personeller = FXCollections.observableArrayList();
+    private Connection baðlantý;
+    private PreparedStatement sorgu;
+    
+    private Alert hatamesaji = new Alert(AlertType.ERROR);
+    private Alert bilgimesaji = new Alert(AlertType.INFORMATION);
+    private LocalDate todaydate = LocalDate.now();
+
+    @FXML
+    void personelEkle(ActionEvent event) {
+    	
+    	LocalDate tarih = dpTarih.getValue();
+    for (int i = 0; i < personeller.size(); i++) {
+		if (todaydate.getYear() - tarih.getYear() < 19) {
+			hatamesaji.setTitle("Hata");
+		    hatamesaji.setHeaderText("Personel 18 yaþýndan küçük olduðu için kayýt olamaz!");
+    	    hatamesaji.show();
+    	    return;
+		}
+	}
+    	String ad = txtAdý.getText();
+    	String soyad = txtSoyadý.getText();
+    	double maaþ = spnMaaþ.getValue();
+    	String cinsiyet = cmbCinsiyet.getValue();
+    	String departman = cmbDepartman.getValue();
+
+    	Personel personel = new Personel(ad, soyad, cinsiyet, departman, maaþ, tarih);
+    	personeller.add(personel);
+    	
+    	// Buradan sonrasýnda veritabaný kayýt iþlemi gerçekleþtireceðiz ! // Buraya kadar bir sýkýntý yok ! 
+    	try {
+			sorgu = baðlantý.prepareStatement("insert into Tablo (Adý,Soyadý,Tarih,Maaþ,Cinsiyet,Departman) values (?,?,?,?,?,?)");
+			sorgu.setString(1, ad);
+			sorgu.setString(2, soyad);
+			sorgu.setDate(3, Date.valueOf(tarih));
+			sorgu.setDouble(4, maaþ);
+			sorgu.setString(5, cinsiyet);
+			sorgu.setString(6, departman);
+			sorgu.execute(); // sorguyu baþlatmaya yarayan kod dizimi ! 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
+    	
+    }
+
+    @FXML
+    void personelGüncelle(ActionEvent event) {
+    	
+    	int index = tblPersonel.getSelectionModel().getSelectedIndex();
+    	LocalDate tarih = dpTarih.getValue();
+    	for (int i = 0; i < personeller.size(); i++) {
+			if (todaydate.getYear() - tarih.getYear() < 19) {
+				hatamesaji.setTitle("Hata");
+			    hatamesaji.setHeaderText("Personel 18 yaþýndan küçük olduðu için kayýt olamaz!");
+	    	    hatamesaji.show();
+	    	    return;
+			}
+		}
+    	String ad = txtAdý.getText();
+    	String soyad = txtSoyadý.getText();
+    	double maaþ = spnMaaþ.getValue();
+    	String cinsiyet = cmbCinsiyet.getValue();
+    	String departman = cmbDepartman.getValue();
+    	
+    	Personel personel = new Personel(ad, soyad, cinsiyet, departman, maaþ, tarih);
+    	personeller.set(index, personel); // Buraya kadar yazýlan kodlar tableview içerisindeki kodlarýn güncellenmesini denetler !
+    	
+    }
+
+    @FXML
+    void personelSil(ActionEvent event) {
+
+    	int index = tblPersonel.getSelectionModel().getSelectedIndex();
+    	if (index >= 0) { // Tabloda kayýt olmayýnca oluþacak exception hatasýný ortadan kaldýrýr ! 
+    		hatamesaji.setTitle("Hata");
+            hatamesaji.setHeaderText("Lütfen tablodan bir kayýt seçiniz ya da kayýt olduðundan emin olunuz!");
+            hatamesaji.show();
+            return; // Ýçerden çýkmasýný saðlayan kod satýrýdýr !  
+		}
+    	tblPersonel.getItems().remove(index);
+    	bilgimesaji.setTitle("Bilgi");
+    	bilgimesaji.setHeaderText("Tablodan seçilen personel baþarýyla kaldýrýldý! ");
+    	bilgimesaji.show();
+    	
+    }
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// Baþlangýçta çalýþan methodtur! 
+		
+		spnMaaþ.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(2200, 15000, 2850.99, 100.0));		
+		// Cinsiyet Atama Ýþlemleri
+		cmbCinsiyet.getItems().add("Erkek");
+		cmbCinsiyet.getItems().add("Kadýn");
+		// Departman Atama Ýþlemleri ! 
+		cmbDepartman.getItems().add("Pazarlama");
+		cmbDepartman.getItems().add("Satýþ");
+		cmbDepartman.getItems().add("Ýnsan Kaynaklarý");
+		cmbDepartman.getItems().add("Bilgi Ýþlem");
+		
+		dpTarih.setValue(LocalDate.of(2001, 01, 01)); // important ! 
+		
+		sütunAdý.setCellValueFactory(new PropertyValueFactory<>("ad"));
+		sütunSoyadý.setCellValueFactory(new PropertyValueFactory<>("soyad"));
+		sütunTarih.setCellValueFactory(new PropertyValueFactory<>("tarih"));
+		sütunMaaþ.setCellValueFactory(new PropertyValueFactory<>("maaþ"));
+		sütunCinsiyet.setCellValueFactory(new PropertyValueFactory<>("cinsiyet"));
+		sütunDeparman.setCellValueFactory(new PropertyValueFactory<>("departman"));
+		
+		tblPersonel.setItems(personeller);
+		
+		// Tablodan seçilen kiþilerin sýrasýyla bilgilerinin sol ekranda yansýmasýný saðlayan kod satýrlarý aþaðýdadýr ! 
+		
+		// Buildpath ve lisans olan dll dosyasýný (her ikisini de ) Final'in projenin içine atýyoruz ! 
+		
+		// Buradan sonra veri tabanýna baðlamak için driver tanýmlýyoruz ! 
+		
+	    try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			baðlantý = DriverManager.getConnection("jdbc:sqlserver://DESKTOP-NGB8CF4\\SQLEXPRESS;database=PersonelBilgileri;integratedSecurity=true");
+		    System.out.println(baðlantý.isValid(0)); // true döndürürse eðer baðlandý anlamýna gelmektedir !!! 
+	    } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+	}
+
+}

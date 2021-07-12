@@ -1,0 +1,95 @@
+package paket;
+
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.ResourceBundle;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+public class KontrolcuUygulama1 implements Initializable {
+
+    @FXML
+    private TextField txtAdý;
+
+    @FXML
+    private TextField txtSoyadý;
+
+    @FXML
+    private DatePicker dpTarih;
+
+    @FXML
+    private Spinner<Double> spnMaaþ;
+
+    @FXML
+    private ComboBox<String> cmbCinsiyet;
+
+    @FXML
+    private ComboBox<String> cmbDepartman;
+
+    @FXML
+    private TableView<Personel> tblPersonel;
+
+    @FXML
+    private TableColumn<Personel, String> sütunAdý;
+
+    @FXML
+    private TableColumn<Personel, String> sütunSoyadý;
+
+    @FXML
+    private TableColumn<Personel, LocalDate> sütunTarih;
+
+    @FXML
+    private TableColumn<Personel, Double> sütunMaaþ;
+
+    @FXML
+    private TableColumn<Personel, String> sütunCinsiyet;
+
+    @FXML
+    private TableColumn<Personel, String> sütunDeparman;
+
+    @FXML
+    void personelEkle(ActionEvent event) {
+
+    }
+
+    @FXML
+    void personelGüncelle(ActionEvent event) {
+
+    }
+
+    @FXML
+    void personelSil(ActionEvent event) {
+
+    }
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// Baþlangýçta çalýþan methodtur! 
+		
+		spnMaaþ.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(2200, 15000, 2850, 100.0));		
+		// Cinsiyet Atama Ýþlemleri
+		cmbCinsiyet.getItems().add("Erkek");
+		cmbCinsiyet.getItems().add("Kadýn");
+		// Departman Atama Ýþlemleri ! 
+		cmbDepartman.getItems().add("Pazarlama");
+		cmbDepartman.getItems().add("Satýþ");
+		cmbDepartman.getItems().add("Ýnsan Kaynaklarý");
+		cmbDepartman.getItems().add("Bilgi Ýþlem");
+		
+		dpTarih.setValue(LocalDate.of(2001, 01, 01));
+		
+		
+		
+	}
+
+}

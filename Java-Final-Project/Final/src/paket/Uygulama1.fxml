@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paket.KontrolcuUygulama1">
+   <children>
+      <TextField fx:id="txtAdı" layoutX="32.0" layoutY="45.0" prefHeight="25.0" prefWidth="177.0" promptText="Adı" />
+      <TextField fx:id="txtSoyadı" layoutX="32.0" layoutY="88.0" prefHeight="25.0" prefWidth="177.0" promptText="Soyadı" />
+      <DatePicker fx:id="dpTarih" layoutX="32.0" layoutY="134.0" prefHeight="25.0" prefWidth="177.0" promptText="Doğum Tarihi" />
+      <Spinner fx:id="spnMaaş" layoutX="32.0" layoutY="185.0" prefHeight="25.0" prefWidth="177.0" />
+      <Label layoutX="32.0" layoutY="168.0" text="Maaş" />
+      <ComboBox fx:id="cmbCinsiyet" layoutX="32.0" layoutY="233.0" prefHeight="25.0" prefWidth="177.0" promptText="Cinsiyet" />
+      <ComboBox fx:id="cmbDepartman" layoutX="32.0" layoutY="281.0" prefHeight="25.0" prefWidth="177.0" promptText="Departman" />
+      <Button layoutX="32.0" layoutY="369.0" mnemonicParsing="false" onAction="#personelEkle" prefHeight="25.0" prefWidth="177.0" text="Personel Ekle" />
+      <Button layoutX="257.0" layoutY="369.0" mnemonicParsing="false" onAction="#personelSil" prefHeight="25.0" prefWidth="177.0" text="Personel Sil" />
+      <Button layoutX="483.0" layoutY="369.0" mnemonicParsing="false" onAction="#personelGüncelle" prefHeight="25.0" prefWidth="177.0" text="Personel Güncelle" />
+      <TableView fx:id="tblPersonel" layoutX="234.0" layoutY="33.0" prefHeight="319.0" prefWidth="464.0">
+        <columns>
+          <TableColumn fx:id="sütunAdı" prefWidth="75.0" text="Adı" />
+          <TableColumn fx:id="sütunSoyadı" prefWidth="75.0" text="Soyadı" />
+            <TableColumn fx:id="sütunTarih" prefWidth="87.0" text="Tarih" />
+            <TableColumn fx:id="sütunMaaş" prefWidth="74.0" text="Maaş" />
+            <TableColumn fx:id="sütunCinsiyet" prefWidth="71.0" text="Cinsiyet" />
+            <TableColumn fx:id="sütunDeparman" prefWidth="81.0" text="Departman" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
